@@ -10,17 +10,17 @@
 
         <item
             android:id="@+id/action_save"
-            android:title="SAVE"
+            android:title="@string/save"
             android:orderInCategory="100"
             app:showAsAction="always"
             tools:ignore="MissingConstraints" />
         <item
             android:id="@+id/action_delete"
-            android:title="DELETE"
+            android:title="@string/delete"
             android:orderInCategory="200"
             android:icon="@drawable/ic_baseline_delete_24"
             app:showAsAction="always"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="AlwaysShowAction,MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
