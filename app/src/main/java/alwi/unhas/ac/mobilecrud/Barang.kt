@@ -1,15 +1,13 @@
 package alwi.unhas.ac.mobilecrud
 
-class Barang {
-    var id: Int? = null
-    var name: String? = null
-    var jenis: String? = null
-    var harga: String? = null
+import android.widget.AdapterView
 
-    constructor(id: Int, name: String, jenis: String, harga:String) {
-        this.id = id
-        this.name = name
-        this.jenis = jenis
-        this.harga = harga
-    }
+class Barang(id: Int, name: String, jenis: String, harga: String) {
+    lateinit var onItemClickListener: AdapterView.OnItemClickListener
+    var id: Int? = id
+    var name: String? = name
+    var jenis: String? = jenis
+    var harga: String? = harga
+
+
 }

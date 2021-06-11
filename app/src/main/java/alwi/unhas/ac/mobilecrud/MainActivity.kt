@@ -1,6 +1,6 @@
 package alwi.unhas.ac.mobilecrud
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +13,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,13 +25,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            var intent = Intent(this, BarangActivity::class.java)
+        fab.setOnClickListener {
+            val intent = Intent(this, BarangActivity::class.java)
             startActivity(intent)
         }
 
         loadData()
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -38,11 +40,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
-        var dbAdapter = Adapter(this)
-        var cursor = dbAdapter.allQuery()
+        val dbAdapter = Adapter(this)
+        val cursor = dbAdapter.allQuery()
 
         listBarang.clear()
-        if (cursor.moveToFirst()){
+        if (cursor!!.moveToFirst()){
             do {
                 val id = cursor.getInt(cursor.getColumnIndex("Id"))
                 val nama = cursor.getString(cursor.getColumnIndex("Nama"))
@@ -53,20 +55,15 @@ class MainActivity : AppCompatActivity() {
             }while (cursor.moveToNext())
         }
 
-        var barangAdapter = BarangAdapter(this, listBarang)
+        val barangAdapter = BarangAdapter(listBarang)
         Barang.adapter = barangAdapter
     }
 
-    inner class BarangAdapter: BaseAdapter{
+    @Suppress("NAME_SHADOWING")
+    inner class BarangAdapter(private var barangList: ArrayList<Barang>) :
+        BaseAdapter() {
 
-        private var barangList = ArrayList<Barang>()
-        private var context: Context? = null
-
-        constructor(context: Context, barangList: ArrayList<Barang>) : super(){
-            this.barangList = barangList
-            this.context = context
-        }
-
+        @SuppressLint("SetTextI18n")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
             val view: View?
             val vh: ViewHolder
@@ -75,20 +72,20 @@ class MainActivity : AppCompatActivity() {
                 view = layoutInflater.inflate(R.layout.barang, parent, false)
                 vh = ViewHolder(view)
                 view.tag = vh
-                Log.i("db", "set tag for ViewHolder, position: " + position)
+                Log.i("db", "set tag for ViewHolder, position: $position")
             }else{
                 view = convertView
                 vh = view.tag as ViewHolder
             }
 
-            var mBarang = barangList[position]
+            val Barang = barangList[position]
 
-            vh.Nama.text = mBarang.name
-            vh.Jenis.text = mBarang.jenis
-            vh.Harga.text = "Rp." + mBarang.harga
+            vh.Nama.text = Barang.name
+            vh.Jenis.text = Barang.jenis
+            vh.Harga.text = "Rp." + Barang.harga
 
             Barang.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
-                updateBarang(mBarang)
+                updateBarang(Barang)
             }
 
             return view
@@ -109,7 +106,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateBarang(barang: Barang) {
-        var  intent = Intent(this, BarangActivity::class.java)
+        val intent = Intent(this, BarangActivity::class.java)
         intent.putExtra("MainActId", barang.id)
         intent.putExtra("MainActNama", barang.name)
         intent.putExtra("MainActJenis", barang.jenis)
@@ -124,8 +121,8 @@ class MainActivity : AppCompatActivity() {
 
         init {
             this.Nama = view?.findViewById(R.id.Nama) as TextView
-            this.Jenis = view?.findViewById(R.id.Jenis) as TextView
-            this.Harga = view?.findViewById(R.id.Harga) as TextView
+            this.Jenis = view.findViewById(R.id.Jenis) as TextView
+            this.Harga = view.findViewById(R.id.Harga) as TextView
         }
     }
 
@@ -140,4 +137,4 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-}}
+}
