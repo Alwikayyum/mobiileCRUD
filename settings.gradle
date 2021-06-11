@@ -1,0 +1,2 @@
+rootProject.name = "mobileCRUD"
+include ':app'
